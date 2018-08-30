@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <variable
+            name="handlers"
+            type="com.sensorsdata.analytics.android.app.MainActivity" />
+    </data>
+
+    <ScrollView xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        tools:context="com.sensorsdata.analytics.android.app.MainActivity">
+
+        <LinearLayout
+            android:id="@+id/rootView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
+
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="普通 setOnClickListener"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/butterknife"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="ButterKnife 绑定 OnClickListener"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/xmlOnClick"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="xmlOnClick"
+                android:text="android:onClick 绑定 OnClickListener"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/dataBinding"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:onClick="@{handlers::dataBindingOnClick}"
+                android:text="DataBinding 绑定 OnClickListener"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/lambdaButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Lambda 语法 setOnClickListener"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/showDialogButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="点击出现 Dialog"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/showMultiChoiceDialogButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="点击出现 MultiChoice Dialog"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/tabHostButton"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="TabHost Test"
+                android:textAllCaps="false" />
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:id="@+id/checkBox"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="神策" />
+
+            <android.support.v7.widget.AppCompatRatingBar
+                android:id="@+id/ratingBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatSeekBar
+                android:id="@+id/seekBar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="20dp"
+                android:layout_marginTop="20dp" />
+
+            <fragment
+                android:id="@+id/testFragment"
+                android:name="com.sensorsdata.analytics.android.app.TestFragment"
+                android:layout_width="match_parent"
+                android:layout_height="100dp" />
+
+            <android.support.v7.widget.AppCompatSpinner
+                android:id="@+id/spinner"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/adapterViewTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="AdapterView Test"/>
+
+            <android.support.v7.widget.AppCompatButton
+                android:id="@+id/expandableListViewTest"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textAllCaps="false"
+                android:text="ExpandableListView Test"/>
+        </LinearLayout>
+
+    </ScrollView>
+</layout>

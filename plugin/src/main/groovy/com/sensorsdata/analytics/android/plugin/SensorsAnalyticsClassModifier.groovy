@@ -9,6 +9,7 @@ import org.objectweb.asm.ClassWriter
 import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
+import java.util.regex.Matcher
 import java.util.zip.ZipEntry
 
 
@@ -51,7 +52,7 @@ class SensorsAnalyticsClassModifier {
             byte[] modifiedClassBytes = null
             byte[] sourceClassBytes = IOUtils.toByteArray(inputStream)
             if (entryName.endsWith(".class")) {
-                className = entryName.replace("/", ".").replace(".class", "")
+                className = entryName.replace(Matcher.quoteReplacement(File.separator), ".").replace(".class", "")
                 if (isShouldModify(className)) {
                     modifiedClassBytes = modifyClass(sourceClassBytes)
                 }

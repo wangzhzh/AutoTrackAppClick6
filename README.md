@@ -6,7 +6,9 @@
 可加入 QQ 讨论群：<br>
 ![ QQ 讨论群](https://github.com/wangzhzh/AutoTrackAppClick1/blob/master/screenshots/img001.jpeg)
 
-# 新书推荐
-神策数据出品的[《Android 全埋点解决方案》](https://item.jd.com/12574672.html)发售啦！！！
+## 新书推荐
 
-[![《Android 全埋点解决方案》](https://github.com/sensorsdata/sa-sdk-android/blob/master/screenshots/android_autotrack_book.png)](https://item.jd.com/12574672.html)
+| 《数据驱动：从方法到实践》 | 《Android 全埋点解决方案》 |
+| ------ | ------ |
+| [![《数据驱动：从方法到实践》](https://github.com/sensorsdata/sa-sdk-android/raw/master/docs/data_driven_book.jpg)](https://u.jd.com/dWkE2x) | [![《Android 全埋点解决方案》](https://github.com/sensorsdata/sa-sdk-android/raw/master/docs/android_autotrack_book.jpg)](https://u.jd.com/2JFaeG) |
+

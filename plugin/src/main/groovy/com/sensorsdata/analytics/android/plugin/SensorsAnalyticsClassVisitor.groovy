@@ -32,8 +32,8 @@ class SensorsAnalyticsClassVisitor extends ClassVisitor implements Opcodes {
             boolean isSensorsDataTrackViewOnClickAnnotation = false
 
             @Override
-            protected void onMethodExit(int opcode) {
-                super.onMethodExit(opcode)
+            protected void onMethodEnter() {
+                super.onMethodEnter()
 
                 if (nameDesc == 'onContextItemSelected(Landroid/view/MenuItem;)Z' ||
                         nameDesc == 'onOptionsItemSelected(Landroid/view/MenuItem;)Z') {

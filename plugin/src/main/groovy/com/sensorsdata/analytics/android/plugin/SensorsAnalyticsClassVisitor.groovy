@@ -112,9 +112,16 @@ class SensorsAnalyticsClassVisitor extends ClassVisitor implements Opcodes {
                     methodVisitor.visitMethodInsn(INVOKESTATIC, SDK_API_CLASS, "trackViewOnClick", "(Ljava/lang/Object;Landroid/view/MenuItem;)V", false)
                 }
 
-                if ((mInterfaces != null && mInterfaces.length > 0) || isSensorsDataTrackViewOnClickAnnotation) {
-                    if ((mInterfaces.contains('android/view/View$OnClickListener') && nameDesc == 'onClick(Landroid/view/View;)V') ||
-                            desc == '(Landroid/view/View;)V') {
+                if (isSensorsDataTrackViewOnClickAnnotation) {
+                    if (desc == '(Landroid/view/View;)V') {
+                        methodVisitor.visitVarInsn(ALOAD, 1)
+                        methodVisitor.visitMethodInsn(INVOKESTATIC, SDK_API_CLASS, "trackViewOnClick", "(Landroid/view/View;)V", false)
+                        return
+                    }
+                }
+
+                if ((mInterfaces != null && mInterfaces.length > 0)) {
+                    if ((mInterfaces.contains('android/view/View$OnClickListener') && nameDesc == 'onClick(Landroid/view/View;)V')) {
                         methodVisitor.visitVarInsn(ALOAD, 1)
                         methodVisitor.visitMethodInsn(INVOKESTATIC, SDK_API_CLASS, "trackViewOnClick", "(Landroid/view/View;)V", false)
                     } else if (mInterfaces.contains('android/content/DialogInterface$OnClickListener') && nameDesc == 'onClick(Landroid/content/DialogInterface;I)V') {

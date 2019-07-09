@@ -2,8 +2,10 @@ package com.sensorsdata.analytics.android.plugin
 
 import org.objectweb.asm.AnnotationVisitor
 import org.objectweb.asm.ClassVisitor
+import org.objectweb.asm.Handle
 import org.objectweb.asm.MethodVisitor
 import org.objectweb.asm.Opcodes
+import org.objectweb.asm.Type
 
 class SensorsAnalyticsClassVisitor extends ClassVisitor implements Opcodes {
     private final
@@ -11,9 +13,19 @@ class SensorsAnalyticsClassVisitor extends ClassVisitor implements Opcodes {
     private String[] mInterfaces
     private ClassVisitor classVisitor
 
+    private HashMap<String, SensorsAnalyticsMethodCell> mLambdaMethodCells = new HashMap<>()
+
     SensorsAnalyticsClassVisitor(final ClassVisitor classVisitor) {
         super(Opcodes.ASM6, classVisitor)
         this.classVisitor = classVisitor
+    }
+
+    private
+    static void visitMethodWithLoadedParams(MethodVisitor methodVisitor, int opcode, String owner, String methodName, String methodDesc, int start, int count, List<Integer> paramOpcodes) {
+        for (int i = start; i < start + count; i++) {
+            methodVisitor.visitVarInsn(paramOpcodes[i - start], i)
+        }
+        methodVisitor.visitMethodInsn(opcode, owner, methodName, methodDesc, false)
     }
 
     @Override
@@ -32,8 +44,66 @@ class SensorsAnalyticsClassVisitor extends ClassVisitor implements Opcodes {
             boolean isSensorsDataTrackViewOnClickAnnotation = false
 
             @Override
+            void visitEnd() {
+                super.visitEnd()
+
+                if (mLambdaMethodCells.containsKey(nameDesc)) {
+                    mLambdaMethodCells.remove(nameDesc)
+                }
+            }
+
+            @Override
+            void visitInvokeDynamicInsn(String name1, String desc1, Handle bsm, Object... bsmArgs) {
+                super.visitInvokeDynamicInsn(name1, desc1, bsm, bsmArgs)
+
+                try {
+                    String desc2 = (String) bsmArgs[0]
+                    SensorsAnalyticsMethodCell sensorsAnalyticsMethodCell = SensorsAnalyticsHookConfig.LAMBDA_METHODS.get(Type.getReturnType(desc1).getDescriptor() + name1 + desc2)
+                    if (sensorsAnalyticsMethodCell != null) {
+                        Handle it = (Handle) bsmArgs[1]
+                        mLambdaMethodCells.put(it.name + it.desc, sensorsAnalyticsMethodCell)
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace()
+                }
+            }
+
+            @Override
             protected void onMethodEnter() {
                 super.onMethodEnter()
+
+                /**
+                 * 在 android.gradle 的 3.2.1 版本中，针对 view 的 setOnClickListener 方法 的 lambda 表达式做特殊处理。
+                 */
+                SensorsAnalyticsMethodCell lambdaMethodCell = mLambdaMethodCells.get(nameDesc)
+                if (lambdaMethodCell != null) {
+                    Type[] types = Type.getArgumentTypes(lambdaMethodCell.desc)
+                    int length = types.length
+                    Type[] lambdaTypes = Type.getArgumentTypes(desc)
+                    int paramStart = lambdaTypes.length - length
+                    if (paramStart < 0) {
+                        return
+                    } else {
+                        for (int i = 0; i < length; i++) {
+                            if (lambdaTypes[paramStart + i].descriptor != types[i].descriptor) {
+                                return
+                            }
+                        }
+                    }
+                    if (!SensorsAnalyticsUtils.isStatic(access)) {
+                        paramStart++
+                        if (lambdaMethodCell.desc == '(Landroid/view/MenuItem;)Z') {
+                            methodVisitor.visitVarInsn(ALOAD, 0)
+                            methodVisitor.visitVarInsn(ALOAD, paramStart)
+                            methodVisitor.visitMethodInsn(INVOKESTATIC, SDK_API_CLASS, lambdaMethodCell.agentName, '(Ljava/lang/Object;Landroid/view/MenuItem;)V', false)
+                            return
+                        }
+                    }
+                    visitMethodWithLoadedParams(methodVisitor, INVOKESTATIC, SDK_API_CLASS,
+                            lambdaMethodCell.agentName, lambdaMethodCell.agentDesc,
+                            paramStart, lambdaMethodCell.paramsCount, lambdaMethodCell.opcodes)
+                    return
+                }
 
                 if (nameDesc == 'onContextItemSelected(Landroid/view/MenuItem;)Z' ||
                         nameDesc == 'onOptionsItemSelected(Landroid/view/MenuItem;)Z') {

@@ -37,31 +37,36 @@ class SensorsAnalyticsClassModifier {
         def outputJar = new File(tempDir, hexName + jarFile.name)
         JarOutputStream jarOutputStream = new JarOutputStream(new FileOutputStream(outputJar))
         Enumeration enumeration = file.entries()
-
         while (enumeration.hasMoreElements()) {
             JarEntry jarEntry = (JarEntry) enumeration.nextElement()
-            InputStream inputStream = file.getInputStream(jarEntry)
-
+            InputStream inputStream = null
+            try {
+                inputStream = file.getInputStream(jarEntry)
+            } catch (Exception e) {
+                continue
+            }
             String entryName = jarEntry.getName()
-            String className
+            if (entryName.endsWith(".DSA") || entryName.endsWith(".SF")) {
+                //ignore
+            } else {
+                String className
+                ZipEntry zipEntry = new ZipEntry(entryName)
+                jarOutputStream.putNextEntry(zipEntry)
 
-            ZipEntry zipEntry = new ZipEntry(entryName)
-
-            jarOutputStream.putNextEntry(zipEntry)
-
-            byte[] modifiedClassBytes = null
-            byte[] sourceClassBytes = IOUtils.toByteArray(inputStream)
-            if (entryName.endsWith(".class")) {
-                className = entryName.replace(Matcher.quoteReplacement(File.separator), ".").replace(".class", "")
-                if (isShouldModify(className)) {
-                    modifiedClassBytes = modifyClass(sourceClassBytes)
+                byte[] modifiedClassBytes = null
+                byte[] sourceClassBytes = IOUtils.toByteArray(inputStream)
+                if (entryName.endsWith(".class")) {
+                    className = entryName.replace(Matcher.quoteReplacement(File.separator), ".").replace(".class", "")
+                    if (isShouldModify(className)) {
+                        modifiedClassBytes = modifyClass(sourceClassBytes)
+                    }
                 }
+                if (modifiedClassBytes == null) {
+                    modifiedClassBytes = sourceClassBytes
+                }
+                jarOutputStream.write(modifiedClassBytes)
+                jarOutputStream.closeEntry()
             }
-            if (modifiedClassBytes == null) {
-                modifiedClassBytes = sourceClassBytes
-            }
-            jarOutputStream.write(modifiedClassBytes)
-            jarOutputStream.closeEntry()
         }
         jarOutputStream.close()
         file.close()

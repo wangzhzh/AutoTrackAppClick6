@@ -20,8 +20,6 @@ package com.sensorsdata.analytics.android.plugin
 import jdk.internal.org.objectweb.asm.Opcodes
 
 class SensorsAnalyticsHookConfig {
-    public static final String SENSORS_ANALYTICS_API = "com/sensorsdata/analytics/android/sdk/SensorsDataAutoTrackHelper"
-
     /**
      * android.gradle 3.2.1 版本中，针对 Lambda 表达式处理
      */
@@ -68,21 +66,11 @@ class SensorsAnalyticsHookConfig {
                 [Opcodes.ALOAD])
         LAMBDA_METHODS.put(onStopTrackingTouch.parent + onStopTrackingTouch.name + onStopTrackingTouch.desc, onStopTrackingTouch)
 
-        SensorsAnalyticsMethodCell onCheckedChanged1 = new SensorsAnalyticsMethodCell(
-                'onCheckedChanged',
-                '(Landroid/widget/RadioGroup;I)V',
-                'Landroid/widget/RadioGroup$OnCheckedChangeListener;',
-                'trackRadioGroup',
-                '(Landroid/widget/RadioGroup;I)V',
-                1, 2,
-                [Opcodes.ALOAD, Opcodes.ILOAD])
-        LAMBDA_METHODS.put(onCheckedChanged1.parent + onCheckedChanged1.name + onCheckedChanged1.desc, onCheckedChanged1)
-
         SensorsAnalyticsMethodCell onClick1 = new SensorsAnalyticsMethodCell(
                 'onClick',
                 '(Landroid/content/DialogInterface;I)V',
                 'Landroid/content/DialogInterface$OnClickListener;',
-                'trackDialog',
+                'trackViewOnClick',
                 '(Landroid/content/DialogInterface;I)V',
                 1, 2,
                 [Opcodes.ALOAD, Opcodes.ILOAD])
@@ -92,7 +80,7 @@ class SensorsAnalyticsHookConfig {
                 'onItemClick',
                 '(Landroid/widget/AdapterView;Landroid/view/View;IJ)V',
                 'Landroid/widget/AdapterView$OnItemClickListener;',
-                'trackListView',
+                'trackViewOnClick',
                 '(Landroid/widget/AdapterView;Landroid/view/View;I)V',
                 1, 3,
                 [Opcodes.ALOAD, Opcodes.ALOAD, Opcodes.ILOAD])
@@ -102,7 +90,7 @@ class SensorsAnalyticsHookConfig {
                 'onGroupClick',
                 '(Landroid/widget/ExpandableListView;Landroid/view/View;IJ)Z',
                 'Landroid/widget/ExpandableListView$OnGroupClickListener;',
-                'trackExpandableListViewOnGroupClick',
+                'trackExpandableListViewGroupOnClick',
                 '(Landroid/widget/ExpandableListView;Landroid/view/View;I)V',
                 1, 3,
                 [Opcodes.ALOAD, Opcodes.ALOAD, Opcodes.ILOAD])
@@ -112,7 +100,7 @@ class SensorsAnalyticsHookConfig {
                 'onChildClick',
                 '(Landroid/widget/ExpandableListView;Landroid/view/View;IIJ)Z',
                 'Landroid/widget/ExpandableListView$OnChildClickListener;',
-                'trackExpandableListViewOnChildClick',
+                'trackExpandableListViewChildOnClick',
                 '(Landroid/widget/ExpandableListView;Landroid/view/View;II)V',
                 1, 4,
                 [Opcodes.ALOAD, Opcodes.ALOAD, Opcodes.ILOAD, Opcodes.ILOAD])
@@ -127,16 +115,6 @@ class SensorsAnalyticsHookConfig {
                 1, 1,
                 [Opcodes.ALOAD])
         LAMBDA_METHODS.put(onTabChanged.parent + onTabChanged.name + onTabChanged.desc, onTabChanged)
-
-        SensorsAnalyticsMethodCell onNavigationItemSelected = new SensorsAnalyticsMethodCell(
-                'onNavigationItemSelected',
-                '(Landroid/view/MenuItem;)Z',
-                'Landroid/support/design/widget/NavigationView$OnNavigationItemSelectedListener;',
-                'trackMenuItem',
-                '(Landroid/view/MenuItem;)V',
-                1, 1,
-                [Opcodes.ALOAD])
-        LAMBDA_METHODS.put(onNavigationItemSelected.parent + onNavigationItemSelected.name + onNavigationItemSelected.desc, onNavigationItemSelected)
 
         // Todo: 扩展
     }

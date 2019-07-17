@@ -43,7 +43,7 @@ class SensorsAnalyticsClassModifier {
             try {
                 inputStream = file.getInputStream(jarEntry)
             } catch (Exception e) {
-                continue
+                return null
             }
             String entryName = jarEntry.getName()
             if (entryName.endsWith(".DSA") || entryName.endsWith(".SF")) {

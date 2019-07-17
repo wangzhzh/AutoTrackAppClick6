@@ -268,7 +268,7 @@ public class SensorsDataAutoTrackHelper {
     }
 
     @Keep
-    private static void trackExpandableListViewChildOnClick(ExpandableListView expandableListView, View view,
+    public static void trackExpandableListViewChildOnClick(ExpandableListView expandableListView, View view,
                                                            int groupPosition, int childPosition) {
         try {
             Context context = expandableListView.getContext();

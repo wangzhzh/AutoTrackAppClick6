@@ -25,7 +25,7 @@ class SensorsAnalyticsClassModifier {
         /**
          * 读取原 jar
          */
-        def file = new JarFile(jarFile)
+        def file = new JarFile(jarFile, false)
 
         /**
          * 设置输出到的 jar

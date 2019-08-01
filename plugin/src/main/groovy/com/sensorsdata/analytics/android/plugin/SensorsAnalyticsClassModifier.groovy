@@ -50,8 +50,8 @@ class SensorsAnalyticsClassModifier {
                 //ignore
             } else {
                 String className
-                ZipEntry zipEntry = new ZipEntry(entryName)
-                jarOutputStream.putNextEntry(zipEntry)
+                JarEntry jarEntry2 = new JarEntry(entryName)
+                jarOutputStream.putNextEntry(jarEntry2)
 
                 byte[] modifiedClassBytes = null
                 byte[] sourceClassBytes = IOUtils.toByteArray(inputStream)

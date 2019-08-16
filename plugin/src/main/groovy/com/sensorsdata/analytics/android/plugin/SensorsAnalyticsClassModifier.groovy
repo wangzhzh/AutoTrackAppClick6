@@ -10,7 +10,6 @@ import java.util.jar.JarEntry
 import java.util.jar.JarFile
 import java.util.jar.JarOutputStream
 import java.util.regex.Matcher
-import java.util.zip.ZipEntry
 
 
 class SensorsAnalyticsClassModifier {
@@ -77,7 +76,7 @@ class SensorsAnalyticsClassModifier {
         ClassWriter classWriter = new ClassWriter(ClassWriter.COMPUTE_MAXS)
         ClassVisitor classVisitor = new SensorsAnalyticsClassVisitor(classWriter)
         ClassReader cr = new ClassReader(srcClass)
-        cr.accept(classVisitor, ClassReader.EXPAND_FRAMES)
+        cr.accept(classVisitor, ClassReader.SKIP_FRAMES)
         return classWriter.toByteArray()
     }
 
